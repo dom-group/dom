@@ -3,7 +3,10 @@ import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
 import '@nomiclabs/hardhat-etherscan'
 
+console.log(process.env)
+
 export default {
+  
   networks: {
     hardhat: {
       allowUnlimitedContractSize: false,

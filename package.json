@@ -27,7 +27,7 @@
     "@typechain/ethers-v5": "^4.0.0",
     "@types/chai": "^4.2.6",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^15.0.2",
+    "@types/node": "^15.14.1",
     "chai": "^4.2.0",
     "decimal.js": "^10.2.1",
     "ethereum-waffle": "^3.0.2",
@@ -48,5 +48,8 @@
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0"
   }
 }
