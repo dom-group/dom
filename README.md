@@ -1,0 +1,45 @@
+# IPH 合约地址记录
+
+| 地址 | 说明 |
+|-----|-------|
+| IPH | 0x7257166592981Abf75e67aAE54a3de1146Eec0b8 |
+| IPHPool | 0x42bFDb094060C30Ee8D36ba288a9B62f5E8D734C |
+| IPHInvitation | 0x951D2b038cd04E56685145df7D1878985f2a8d76 |
+| USDT | 0x688B5999343C1ef85726a881CcdaA6cafF0eFb77 |
+| BTC | 0x82781f8bBF50599160f73395dCdf0AfB38694300 |
+| ETH | 0x34a844AF6A11e5Bdcef7C9a74c48A4A5155efe7D |
+| Factory | 0xDb2c1C974dAb85846181396ED6A742667F15AF26 |
+| IPHPerBlock | 280211107060185180 |
+| ROOT | 0xBc6339a0227DD17EB4a9941CCA2D2764c73310d8 |
+| FEEOWNER | 0xBc6339a0227DD17EB4a9941CCA2D2764c73310d8 |
+
+
+
+## 接口说明
+* IPHInvitation
+
+1. register(address _referrer)，用户注册，需要传入推荐人地址 
+2. promote(uint256 _level), 用户升级，_level从0开始，范围0-4
+
+
+* IPHPool
+
+1. earned(address account) 查询当前奖励
+2. deposit(uint256 _pid, uint256 _amountA, uint256 _rid) pid: 池子pid,_amountA：入金,_rid：选择的投资类型
+3. withdraw(uint256 _pid) 提现
+4. withdrawReward 获取奖励
+
+
+# IPH 合约地址记录主网
+
+| 地址 | 说明 |
+|-----|-------|
+| IPH | 0x2ff31405F589cE517DbC5cA1D3C60772eAD8d05e |
+| IPHPool | 0x69933C46b7F950bE5d327882d7644a6C715Af4f0 |
+| IPHInvitation | 0x82556F907054193b4e3c146d40ef96a043aF982b |
+| USDT | 0x55d398326f99059fF775485246999027B3197955 |
+| BTC | 0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c |
+| ETH | 0x2170Ed0880ac9A755fd29B2688956BD959F933F8 |
+| Factory | 0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73 |
+| IPHPerBlock | 280211107060185180 |
+| ROOT | 0x914Da3a7AC00F04Bc8A4CA98470fb23aDF73d70b |
