@@ -44,7 +44,6 @@ contract DomInvitation is Ownable {
         domToken = _domToken;
         userCount = userCount.add(1);
         Users[_primaryAddr].id = userCount;
-
         
         index2User[userCount] = _primaryAddr;
         primaryAddr = _primaryAddr;
@@ -171,12 +170,13 @@ contract DomInvitation is Ownable {
                 break;
             }
             uint256 level = Users[preAddr].level;
-            if ( i >= level.mul(2)) {
-                continue;
+            
+            if(i<level.mul(2)) {
+                uint256 rewardAmount = amount.mul(marketList[i]).div(100);
+                domToken.transferFrom(msg.sender, preAddr, rewardAmount);
+                rewardTotalAmount = rewardTotalAmount.add(rewardAmount);
             }
-            uint256 rewardAmount = amount.mul(marketList[i]).div(100);
-            domToken.transferFrom(msg.sender, preAddr, rewardAmount);
-            rewardTotalAmount = rewardTotalAmount.add(rewardAmount);
+            
             preAddr = Users[preAddr].referrer;
         }
         domToken.transferFrom(msg.sender, dead, _amount.sub(rewardTotalAmount));
