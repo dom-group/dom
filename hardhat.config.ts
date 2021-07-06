@@ -2,12 +2,12 @@ import 'hardhat-typechain'
 import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
 import '@nomiclabs/hardhat-etherscan'
+import "hardhat-abi-exporter"
+import "hardhat-deploy"
+import "hardhat-deploy-ethers"
+import dotenv from "dotenv";
 
-const dotenv = require('dotenv');
 dotenv.config(); 
-
-console.log(process.env.INFURA_API_KEY)
-
 export default {
   
   networks: {
@@ -31,7 +31,7 @@ export default {
       accounts: [process.env.PRIVATE_KEY]
     },
     kovan: {
-      url: `https://kovan.infura.io/v3/95641802991b4c63a4796ee0031029e4`,
+      url: `https://kovan.infura.io/v3/${process.env.INFURA_API_KEY}`,
       accounts: [process.env.PRIVATE_KEY]
     },
     heco: {
@@ -44,8 +44,6 @@ export default {
     },
   },
   etherscan: {
-    // Your API key for Etherscan
-    // Obtain one at https://etherscan.io/
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
   solidity: {

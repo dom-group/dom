@@ -1276,7 +1276,7 @@ contract Dom is DelegateERC20, Ownable {
     using EnumerableSet for EnumerableSet.AddressSet;
     EnumerableSet.AddressSet private _minters;
 
-    constructor() public ERC20("Dom Token", "Dom"){
+    constructor() public ERC20("DOMINO", "Dom"){
         _mint(msg.sender, preMineSupply);
     }
 

@@ -1,0 +1,38 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_userAddr",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_power",
+        "type": "uint256"
+      }
+    ],
+    "name": "redeemPower",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_userAddr",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_power",
+        "type": "uint256"
+      }
+    ],
+    "name": "referReward",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
