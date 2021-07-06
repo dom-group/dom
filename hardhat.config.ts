@@ -3,7 +3,10 @@ import '@nomiclabs/hardhat-ethers'
 import '@nomiclabs/hardhat-waffle'
 import '@nomiclabs/hardhat-etherscan'
 
-console.log(process.env)
+const dotenv = require('dotenv');
+dotenv.config(); 
+
+console.log(process.env.INFURA_API_KEY)
 
 export default {
   
@@ -33,6 +36,10 @@ export default {
     },
     heco: {
       url: `https://http-mainnet-node.huobichain.com`,
+      accounts: [process.env.PRIVATE_KEY]
+    },
+    bsct: {
+      url: `https://data-seed-prebsc-1-s1.binance.org:8545/`,
       accounts: [process.env.PRIVATE_KEY]
     },
   },

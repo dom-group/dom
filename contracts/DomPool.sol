@@ -240,8 +240,10 @@ contract DomPool is Ownable, ERC20 {
     function APR(uint _pid) public view returns(uint yopt, uint cic) {
         (uint unitDom,uint256 priceDom) = PriceLibrary.price(factory,address(dom),usdt);
         Pool storage pool = pools[_pid];
-        yopt = (28888*365*domsPerBlock)*priceDom*pool.maxWeight*(pool.minWeight[2])/10000/unitDom;
+        yopt = (28800*365*domsPerBlock)*priceDom*pool.maxWeight*(pool.minWeight[2])/10000/unitDom;
         cic = pool.totalAmount;
+        uint _totalSupply = totalSupply();
+        yopt = _totalSupply==0?0:yopt*cic/_totalSupply;
     }
     
     function deposit(uint256 _pid, uint256 _amountT, uint256 _rid) public notPause {
@@ -252,18 +254,17 @@ contract DomPool is Ownable, ERC20 {
          uint _amountA;
          uint _amountB;
          uint _amountR;
-         
         
         ( _amountA, _amountB,_amountR) = transferAmount(pool,_rid,_amountT);
         
         
         if(address(inviter)!=address(0)) inviter.referReward(msg.sender,_amountR);
 
-        users[msg.sender].deposits[_pid].amountA+=_amountA;
-        users[msg.sender].deposits[_pid].amountB+=_amountB;
-        users[msg.sender].deposits[_pid].amountR+=_amountR;
+        users[msg.sender].deposits[_pid].amountA = users[msg.sender].deposits[_pid].amountA.add(_amountA);
+        users[msg.sender].deposits[_pid].amountB = users[msg.sender].deposits[_pid].amountB.add(_amountB);
+        users[msg.sender].deposits[_pid].amountR = users[msg.sender].deposits[_pid].amountR.add(_amountR);
 
-        pool.totalAmount+=_amountR;
+        pool.totalAmount = pool.totalAmount.add(_amountR);
 
         _mint(msg.sender,_amountR);
 
@@ -284,7 +285,7 @@ contract DomPool is Ownable, ERC20 {
         pool.tokenB.safeTransferFrom(msg.sender,address(this),_amountB); 
 
         require(priceA!=0&&priceB!=0,"Invalid price");
-        _amountR = _amountT*pool.maxWeight*pool.minWeight[_rid]/10000;
+        _amountR = _amountT.mul(pool.maxWeight).mul(pool.minWeight[_rid])/10000;
     }
 
     function withdraw(uint256 _pid) public notPause {
@@ -373,7 +374,9 @@ contract DomPool is Ownable, ERC20 {
         for(;fromPeriod<=toPeriod;fromPeriod++){
             uint _endBlock = bonusEndBlock(fromPeriod);
             if(_to<_endBlock) _endBlock = _to;
-            multiplier += _endBlock.sub(_startBlock).mul(outputRate(fromPeriod));
+            multiplier = multiplier.add(
+                _endBlock.sub(_startBlock).mul(outputRate(fromPeriod))
+            );
             _startBlock = _endBlock;
         }
 
@@ -401,7 +404,7 @@ contract DomPool is Ownable, ERC20 {
 
     function getBalanceOfHash(address account) public view returns(uint poolHash,uint teamHash) {
             for(uint i = 0;i<pools.length;i++) {
-                poolHash+=users[account].deposits[i].amountR;
+                poolHash = poolHash.add(users[account].deposits[i].amountR);
             }
             teamHash = balanceOf(account).sub(poolHash);
     }
@@ -427,7 +430,7 @@ contract DomPool is Ownable, ERC20 {
         return pools.length;
     }
 
-    // Safe Bats transfer function, just in case if rounding error causes pool to not have enough Batss.
+    // Safe Doms transfer function, just in case if rounding error causes pool to not have enough Doms.
     function safeDomTransfer(address _to, uint256 _amount) internal {
         uint256 domBal = dom.balanceOf(address(this));
         if (_amount > domBal) {
