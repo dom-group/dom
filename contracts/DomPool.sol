@@ -29,6 +29,7 @@ contract DomPool is Ownable, ERC20 {
         startBlock = _startBlock;
         lastUpdateBlock = _startBlock;
         feeOwner = _feeOwner;
+        initRate();
     }
 
     struct DepositInfo {
@@ -60,6 +61,8 @@ contract DomPool is Ownable, ERC20 {
     address public feeOwner;
     
     uint256 internal DIVISOR = 100;
+    uint256 internal BASE_INIT = 1000000;
+    uint256 internal BASE_RATE = 5;
 
     uint256 constant internal REDUCE_PERIOD = 864000;
     uint256 constant internal THRESHOLD = 5000000 * 1e18 ;
@@ -81,6 +84,7 @@ contract DomPool is Ownable, ERC20 {
 
 
     Pool[] public pools;
+    mapping( uint => uint) public yinit;
     //uint[3] public proportions = [80,70,50];
 
     mapping(address => uint256) public rewards;
@@ -99,6 +103,40 @@ contract DomPool is Ownable, ERC20 {
     modifier transferNotPause() {
         require(paused == false, "Mining has been suspended");
         _;
+    }
+ 
+    function initRate() internal {
+        uint curRate = BASE_INIT;
+        uint base = 100**11;
+        for(uint i = 0; i<17; i++) {
+            yinit[i] = curRate;
+            uint _yrate = yrate(i);
+            uint _yLast = curRate.mul(
+                _yrate**11
+            )/base;
+            curRate = _yLast.mul(yrate(i+1))/100;
+        }
+
+    }
+
+    function yrate(uint _year) public view returns(uint256) {
+        uint rate;
+        
+        if(_year>=BASE_RATE) {
+            rate = 1;
+        }else{
+            rate = BASE_RATE-_year;
+        }
+
+        return 100 - rate;
+    }
+
+    function mrate(uint _month) public view returns (uint) {
+        uint _year = _month/12;
+        uint _yinitRate = yinit[_year];
+        uint _yrate = yrate(_year);
+        uint _mi = _month%12;
+        return _yinitRate.mul(_yrate**_mi)/(100**_mi);
     }
 
     function mint(address _to, uint256 _amount) external override returns(bool) {
@@ -176,7 +214,7 @@ contract DomPool is Ownable, ERC20 {
 
     function updateAndMint() internal returns( uint domincr, uint domactul, uint burned ) {
         (uint256 multiplier,uint256 curHash) = getMultiplier(lastUpdateBlock,block.number);
-        domincr = multiplier.mul(domsPerBlock).div(100);
+        domincr = multiplier.mul(domsPerBlock).div(BASE_INIT);
         //bool _minted = dom.mint(address(this), domincr);
         //if(_minted){
         domactul = domincr.mul(curHash).div(THRESHOLD);
@@ -215,7 +253,7 @@ contract DomPool is Ownable, ERC20 {
 
     function earned(address account) public view returns (uint256) {
         (uint256 multiplier,uint256 curHash) = getMultiplier(lastUpdateBlock,block.number);
-        uint domactul = multiplier.mul(domsPerBlock).mul(curHash).div(THRESHOLD).div(100);
+        uint domactul = multiplier.mul(domsPerBlock).mul(curHash).div(THRESHOLD).div(BASE_INIT);
         return
             balanceOf(account)
                 .mul(
@@ -227,7 +265,7 @@ contract DomPool is Ownable, ERC20 {
 
     function poolEarned(address account, uint _pid) public view returns (uint256) {
         (uint256 multiplier,uint256 curHash) = getMultiplier(lastUpdateBlock,block.number);
-        uint domactul = multiplier.mul(domsPerBlock).mul(curHash).div(THRESHOLD).div(100);
+        uint domactul = multiplier.mul(domsPerBlock).mul(curHash).div(THRESHOLD).div(BASE_INIT);
         uint _balance = users[account].deposits[_pid].amountR;
         return
             _balance
@@ -254,6 +292,7 @@ contract DomPool is Ownable, ERC20 {
          uint _amountA;
          uint _amountB;
          uint _amountR;
+         
         
         ( _amountA, _amountB,_amountR) = transferAmount(pool,_rid,_amountT);
         
@@ -285,7 +324,7 @@ contract DomPool is Ownable, ERC20 {
         pool.tokenB.safeTransferFrom(msg.sender,address(this),_amountB); 
 
         require(priceA!=0&&priceB!=0,"Invalid price");
-        _amountR = _amountT.mul(pool.maxWeight).mul(pool.minWeight[_rid])/10000;
+        _amountR = _amountT*pool.maxWeight*pool.minWeight[_rid]/10000;
     }
 
     function withdraw(uint256 _pid) public notPause {
@@ -375,7 +414,7 @@ contract DomPool is Ownable, ERC20 {
             uint _endBlock = bonusEndBlock(fromPeriod);
             if(_to<_endBlock) _endBlock = _to;
             multiplier = multiplier.add(
-                _endBlock.sub(_startBlock).mul(outputRate(fromPeriod))
+                _endBlock.sub(_startBlock).mul(mrate(fromPeriod))
             );
             _startBlock = _endBlock;
         }
@@ -420,17 +459,11 @@ contract DomPool is Ownable, ERC20 {
         }
     }
 
-    function outputRate(uint256 _period) public pure returns (uint _rate) {
-        if(_period<100){
-            _rate = 100-_period;
-        }
-    }
-
     function poolLength() public view returns (uint256) {
         return pools.length;
     }
 
-    // Safe Doms transfer function, just in case if rounding error causes pool to not have enough Doms.
+    // Safe Bats transfer function, just in case if rounding error causes pool to not have enough Batss.
     function safeDomTransfer(address _to, uint256 _amount) internal {
         uint256 domBal = dom.balanceOf(address(this));
         if (_amount > domBal) {
