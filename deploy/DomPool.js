@@ -13,8 +13,6 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     const domsPerBlock = process.env.DOMSPERBLOCK;
     const startBlock = process.env.STARTBLOCK;
     const feeOwner = process.env.FEEOWNER;
-
-    console.log(domAddress,usdt,factory,domsPerBlock,startBlock,feeOwner)
   
     await deploy("DomPool", {
       from: deployer,
