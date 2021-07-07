@@ -1,9 +1,9 @@
 {
-  "name": "Bats",
+  "name": "Dom",
   "version": "1.0.0",
-  "description": "bats program",
+  "description": "Dom program",
   "main": "index.js",
-  "repository": "https://github.com/anyapy-contract/bats.git",
+  "repository": "https://github.com/dom-group/dom.git",
   "author": "Nil",
   "license": "MIT",
   "types": "./types/index.ts",
