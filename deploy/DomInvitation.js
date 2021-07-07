@@ -10,6 +10,8 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     const priceLibraryAddress = (await deployments.get("PriceLibrary")).address;
 
     const usdt = process.env.USDT;
+    const btc = "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c";
+    const eth = "0x2170Ed0880ac9A755fd29B2688956BD959F933F8";
     const factory = process.env.FACTORY;
     const root = process.env.ROOT;
   
@@ -24,11 +26,6 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
         methodName: 'setFactory',
         args: [factory, usdt],
       }
-    }).then((res)=>{
-        domPool.execute({
-            methodName: 'setInviter',
-            args: [res.address],
-        });
     })
   };
   

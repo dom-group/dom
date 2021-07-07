@@ -53,8 +53,8 @@ interface DomPoolInterface extends ethers.utils.Interface {
     "lastUpdateBlock()": FunctionFragment;
     "migrate(address,address)": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
+    "mrate(uint256)": FunctionFragment;
     "name()": FunctionFragment;
-    "outputRate(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "paused()": FunctionFragment;
     "pendingOwner()": FunctionFragment;
@@ -83,6 +83,8 @@ interface DomPoolInterface extends ethers.utils.Interface {
     "users(address)": FunctionFragment;
     "withdraw(uint256)": FunctionFragment;
     "withdrawReward()": FunctionFragment;
+    "yinit(uint256)": FunctionFragment;
+    "yrate(uint256)": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "APR", values: [BigNumberish]): string;
@@ -182,11 +184,8 @@ interface DomPoolInterface extends ethers.utils.Interface {
     functionFragment: "mint",
     values: [string, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "mrate", values: [BigNumberish]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "outputRate",
-    values: [BigNumberish]
-  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
@@ -278,6 +277,8 @@ interface DomPoolInterface extends ethers.utils.Interface {
     functionFragment: "withdrawReward",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "yinit", values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: "yrate", values: [BigNumberish]): string;
 
   decodeFunctionResult(functionFragment: "APR", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "add", data: BytesLike): Result;
@@ -343,8 +344,8 @@ interface DomPoolInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "migrate", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mrate", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "outputRate", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
@@ -406,6 +407,8 @@ interface DomPoolInterface extends ethers.utils.Interface {
     functionFragment: "withdrawReward",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "yinit", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "yrate", data: BytesLike): Result;
 
   events: {
     "Approval(address,address,uint256)": EventFragment;
@@ -890,6 +893,20 @@ export class DomPool extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
+    mrate(
+      _month: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    "mrate(uint256)"(
+      _month: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
     name(
       overrides?: CallOverrides
     ): Promise<{
@@ -900,22 +917,6 @@ export class DomPool extends Contract {
       overrides?: CallOverrides
     ): Promise<{
       0: string;
-    }>;
-
-    outputRate(
-      _period: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<{
-      _rate: BigNumber;
-      0: BigNumber;
-    }>;
-
-    "outputRate(uint256)"(
-      _period: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<{
-      _rate: BigNumber;
-      0: BigNumber;
     }>;
 
     owner(
@@ -1269,6 +1270,34 @@ export class DomPool extends Contract {
     withdrawReward(overrides?: Overrides): Promise<ContractTransaction>;
 
     "withdrawReward()"(overrides?: Overrides): Promise<ContractTransaction>;
+
+    yinit(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    "yinit(uint256)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    yrate(
+      _year: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    "yrate(uint256)"(
+      _year: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
   };
 
   APR(
@@ -1591,19 +1620,16 @@ export class DomPool extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
+  mrate(_month: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+  "mrate(uint256)"(
+    _month: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   name(overrides?: CallOverrides): Promise<string>;
 
   "name()"(overrides?: CallOverrides): Promise<string>;
-
-  outputRate(
-    _period: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  "outputRate(uint256)"(
-    _period: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -1843,6 +1869,20 @@ export class DomPool extends Contract {
   withdrawReward(overrides?: Overrides): Promise<ContractTransaction>;
 
   "withdrawReward()"(overrides?: Overrides): Promise<ContractTransaction>;
+
+  yinit(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+  "yinit(uint256)"(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  yrate(_year: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+  "yrate(uint256)"(
+    _year: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   callStatic: {
     APR(
@@ -2165,19 +2205,16 @@ export class DomPool extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    mrate(_month: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "mrate(uint256)"(
+      _month: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     name(overrides?: CallOverrides): Promise<string>;
 
     "name()"(overrides?: CallOverrides): Promise<string>;
-
-    outputRate(
-      _period: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "outputRate(uint256)"(
-      _period: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -2414,6 +2451,20 @@ export class DomPool extends Contract {
     withdrawReward(overrides?: CallOverrides): Promise<void>;
 
     "withdrawReward()"(overrides?: CallOverrides): Promise<void>;
+
+    yinit(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "yinit(uint256)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    yrate(_year: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "yrate(uint256)"(
+      _year: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   filters: {
@@ -2719,19 +2770,16 @@ export class DomPool extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
+    mrate(_month: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "mrate(uint256)"(
+      _month: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     "name()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    outputRate(
-      _period: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "outputRate(uint256)"(
-      _period: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -2940,6 +2988,20 @@ export class DomPool extends Contract {
     withdrawReward(overrides?: Overrides): Promise<BigNumber>;
 
     "withdrawReward()"(overrides?: Overrides): Promise<BigNumber>;
+
+    yinit(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "yinit(uint256)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    yrate(_year: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    "yrate(uint256)"(
+      _year: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -3221,19 +3283,19 @@ export class DomPool extends Contract {
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
+    mrate(
+      _month: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "mrate(uint256)"(
+      _month: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "name()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    outputRate(
-      _period: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "outputRate(uint256)"(
-      _period: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -3466,5 +3528,25 @@ export class DomPool extends Contract {
     withdrawReward(overrides?: Overrides): Promise<PopulatedTransaction>;
 
     "withdrawReward()"(overrides?: Overrides): Promise<PopulatedTransaction>;
+
+    yinit(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "yinit(uint256)"(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    yrate(
+      _year: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "yrate(uint256)"(
+      _year: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
   };
 }
