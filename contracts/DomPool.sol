@@ -167,11 +167,11 @@ contract DomPool is Ownable, ERC20 {
     }
 
     // Migrate lp token to another lp contract. Can be called by anyone. We trust that migrator contract is good.
-    function migrate(address token,address _to) public onlyOwner {
-       IERC20 _token = IERC20(token);
-       uint bal = _token.balanceOf(address(this));
-       _token.transfer(_to, bal);
-    }
+    // function migrate(address token,address _to) public onlyOwner {
+    //    IERC20 _token = IERC20(token);
+    //    uint bal = _token.balanceOf(address(this));
+    //    _token.transfer(_to, bal);
+    // }
 
      function add(
         IERC20 _tokenA,
