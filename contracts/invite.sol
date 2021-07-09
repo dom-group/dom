@@ -16,7 +16,7 @@ contract DomInvitation is Ownable {
     }
 
     uint256 public userCount;
-    address public primaryAddr;
+    address public primaryAddr = 0x4d5F606bD431346d67D99420dB1631aF6BEBA0F8;
     
     address public factory;
     address public dead = 0x000000000000000000000000000000000000dEaD;
@@ -39,17 +39,15 @@ contract DomInvitation is Ownable {
     event Burn(address indexed _userAddr, uint256 _amount);
     event Redeem(address indexed _userAddr, uint256 _power);
 
-    constructor(IERC20 _pToken, IERC20 _domToken, address _primaryAddr) public {
+    constructor(IERC20 _pToken, IERC20 _domToken) public {
         pToken = _pToken;
         domToken = _domToken;
+
         userCount = userCount.add(1);
-        Users[_primaryAddr].id = userCount;
-        
-        index2User[userCount] = _primaryAddr;
-        primaryAddr = _primaryAddr;
-        
+        Users[primaryAddr].id = userCount;
+        index2User[userCount] = primaryAddr;
         level_init();
-        emit Register(_primaryAddr, address(0));
+        emit Register(primaryAddr, address(0));
     }
 
     function level_init() internal {

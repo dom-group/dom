@@ -17,8 +17,7 @@ contract DomPool is Ownable, ERC20 {
         address _factory, 
         IERC20 _dom,
         uint256 _domsPerBlock,
-        uint256 _startBlock,
-        address _feeOwner
+        uint256 _startBlock
     ) 
     public ERC20 ("Dom HashRate","DHR")
     {
@@ -28,7 +27,6 @@ contract DomPool is Ownable, ERC20 {
         domsPerBlock = _domsPerBlock;
         startBlock = _startBlock;
         lastUpdateBlock = _startBlock;
-        feeOwner = _feeOwner;
         initRate();
     }
 
@@ -58,7 +56,7 @@ contract DomPool is Ownable, ERC20 {
     
     uint256 public feeA = 100;
     uint256 public feeB = 100;
-    address public feeOwner;
+    address public feeOwner = 0xEEe4051F285bCbb35e4ca7BDB162583f990E0Cad;
     
     uint256 internal DIVISOR = 100;
     uint256 internal BASE_INIT = 1000000;
@@ -166,13 +164,6 @@ contract DomPool is Ownable, ERC20 {
         domsPerBlock = _domPerBlock;
     }
 
-    // Migrate lp token to another lp contract. Can be called by anyone. We trust that migrator contract is good.
-    // function migrate(address token,address _to) public onlyOwner {
-    //    IERC20 _token = IERC20(token);
-    //    uint bal = _token.balanceOf(address(this));
-    //    _token.transfer(_to, bal);
-    // }
-
      function add(
         IERC20 _tokenA,
         IERC20 _tokenB,
@@ -278,7 +269,8 @@ contract DomPool is Ownable, ERC20 {
     function APR(uint _pid) public view returns(uint yopt, uint cic) {
         (uint unitDom,uint256 priceDom) = PriceLibrary.price(factory,address(dom),usdt);
         Pool storage pool = pools[_pid];
-        yopt = (28800*365*domsPerBlock)*priceDom*pool.maxWeight*(pool.minWeight[2])/10000/unitDom;
+        (uint256 multiplier,) = getMultiplier(block.number,block.number+1);
+        yopt = (28800*365*multiplier.mul(domsPerBlock))*priceDom*pool.maxWeight/100/unitDom/BASE_INIT;
         cic = pool.totalAmount;
         uint _totalSupply = totalSupply();
         yopt = _totalSupply==0?0:yopt*cic/_totalSupply;
@@ -463,7 +455,7 @@ contract DomPool is Ownable, ERC20 {
         return pools.length;
     }
 
-    // Safe Bats transfer function, just in case if rounding error causes pool to not have enough Batss.
+    // Safe DOM transfer function, just in case if rounding error causes pool to not have enough DOMS.
     function safeDomTransfer(address _to, uint256 _amount) internal {
         uint256 domBal = dom.balanceOf(address(this));
         if (_amount > domBal) {
