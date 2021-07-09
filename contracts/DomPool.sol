@@ -196,12 +196,6 @@ contract DomPool is Ownable, ERC20 {
         pools[_pid].minWeight = _minWeight;
         pools[_pid].proportions = _proportions;
     }
-    
-    function setFee(uint _feeA,uint _feeB,address _feeOwner) public onlyOwner {
-        feeA = _feeA;
-        feeB = _feeB;
-        feeOwner = _feeOwner;
-    }
 
     function updateAndMint() internal returns( uint domincr, uint domactul, uint burned ) {
         (uint256 multiplier,uint256 curHash) = getMultiplier(lastUpdateBlock,block.number);
