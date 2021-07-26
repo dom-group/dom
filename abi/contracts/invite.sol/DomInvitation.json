@@ -10,11 +10,6 @@
         "internalType": "contract IERC20",
         "name": "_domToken",
         "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_primaryAddr",
-        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",

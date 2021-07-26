@@ -51,7 +51,6 @@ interface DomPoolInterface extends ethers.utils.Interface {
     "increaseAllowance(address,uint256)": FunctionFragment;
     "inviter()": FunctionFragment;
     "lastUpdateBlock()": FunctionFragment;
-    "migrate(address,address)": FunctionFragment;
     "mint(address,uint256)": FunctionFragment;
     "mrate(uint256)": FunctionFragment;
     "name()": FunctionFragment;
@@ -67,7 +66,6 @@ interface DomPoolInterface extends ethers.utils.Interface {
     "rewards(address)": FunctionFragment;
     "set(uint256,bool,uint256,uint256[3],uint256[3])": FunctionFragment;
     "setDomPerBlock(uint256)": FunctionFragment;
-    "setFee(uint256,uint256,address)": FunctionFragment;
     "setInviter(address)": FunctionFragment;
     "setPause()": FunctionFragment;
     "setTransferPause()": FunctionFragment;
@@ -177,10 +175,6 @@ interface DomPoolInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "migrate",
-    values: [string, string]
-  ): string;
-  encodeFunctionData(
     functionFragment: "mint",
     values: [string, BigNumberish]
   ): string;
@@ -227,10 +221,6 @@ interface DomPoolInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "setDomPerBlock",
     values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setFee",
-    values: [BigNumberish, BigNumberish, string]
   ): string;
   encodeFunctionData(functionFragment: "setInviter", values: [string]): string;
   encodeFunctionData(functionFragment: "setPause", values?: undefined): string;
@@ -342,7 +332,6 @@ interface DomPoolInterface extends ethers.utils.Interface {
     functionFragment: "lastUpdateBlock",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "migrate", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mrate", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
@@ -370,7 +359,6 @@ interface DomPoolInterface extends ethers.utils.Interface {
     functionFragment: "setDomPerBlock",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setFee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setInviter", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setPause", data: BytesLike): Result;
   decodeFunctionResult(
@@ -869,18 +857,6 @@ export class DomPool extends Contract {
       0: BigNumber;
     }>;
 
-    migrate(
-      token: string,
-      _to: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "migrate(address,address)"(
-      token: string,
-      _to: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
     mint(
       _to: string,
       _amount: BigNumberish,
@@ -1096,20 +1072,6 @@ export class DomPool extends Contract {
 
     "setDomPerBlock(uint256)"(
       _domPerBlock: BigNumberish,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    setFee(
-      _feeA: BigNumberish,
-      _feeB: BigNumberish,
-      _feeOwner: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "setFee(uint256,uint256,address)"(
-      _feeA: BigNumberish,
-      _feeB: BigNumberish,
-      _feeOwner: string,
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
@@ -1596,18 +1558,6 @@ export class DomPool extends Contract {
 
   "lastUpdateBlock()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-  migrate(
-    token: string,
-    _to: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "migrate(address,address)"(
-    token: string,
-    _to: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
   mint(
     _to: string,
     _amount: BigNumberish,
@@ -1747,20 +1697,6 @@ export class DomPool extends Contract {
 
   "setDomPerBlock(uint256)"(
     _domPerBlock: BigNumberish,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  setFee(
-    _feeA: BigNumberish,
-    _feeB: BigNumberish,
-    _feeOwner: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "setFee(uint256,uint256,address)"(
-    _feeA: BigNumberish,
-    _feeB: BigNumberish,
-    _feeOwner: string,
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
@@ -2181,18 +2117,6 @@ export class DomPool extends Contract {
 
     "lastUpdateBlock()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    migrate(
-      token: string,
-      _to: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "migrate(address,address)"(
-      token: string,
-      _to: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     mint(
       _to: string,
       _amount: BigNumberish,
@@ -2332,20 +2256,6 @@ export class DomPool extends Contract {
 
     "setDomPerBlock(uint256)"(
       _domPerBlock: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setFee(
-      _feeA: BigNumberish,
-      _feeB: BigNumberish,
-      _feeOwner: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "setFee(uint256,uint256,address)"(
-      _feeA: BigNumberish,
-      _feeB: BigNumberish,
-      _feeOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -2746,18 +2656,6 @@ export class DomPool extends Contract {
 
     "lastUpdateBlock()"(overrides?: CallOverrides): Promise<BigNumber>;
 
-    migrate(
-      token: string,
-      _to: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "migrate(address,address)"(
-      token: string,
-      _to: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
     mint(
       _to: string,
       _amount: BigNumberish,
@@ -2872,20 +2770,6 @@ export class DomPool extends Contract {
 
     "setDomPerBlock(uint256)"(
       _domPerBlock: BigNumberish,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    setFee(
-      _feeA: BigNumberish,
-      _feeB: BigNumberish,
-      _feeOwner: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "setFee(uint256,uint256,address)"(
-      _feeA: BigNumberish,
-      _feeB: BigNumberish,
-      _feeOwner: string,
       overrides?: Overrides
     ): Promise<BigNumber>;
 
@@ -3259,18 +3143,6 @@ export class DomPool extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    migrate(
-      token: string,
-      _to: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "migrate(address,address)"(
-      token: string,
-      _to: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
     mint(
       _to: string,
       _amount: BigNumberish,
@@ -3398,20 +3270,6 @@ export class DomPool extends Contract {
 
     "setDomPerBlock(uint256)"(
       _domPerBlock: BigNumberish,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    setFee(
-      _feeA: BigNumberish,
-      _feeB: BigNumberish,
-      _feeOwner: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "setFee(uint256,uint256,address)"(
-      _feeA: BigNumberish,
-      _feeB: BigNumberish,
-      _feeOwner: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 

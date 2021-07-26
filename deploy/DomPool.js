@@ -16,7 +16,7 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
   
     await deploy("DomPool", {
       from: deployer,
-      args: [usdt,factory, domAddress,domsPerBlock,startBlock,feeOwner],
+      args: [usdt,factory, domAddress,domsPerBlock,startBlock],
       log: true,
       libraries: {
         PriceLibrary: priceLibraryAddress

@@ -25,11 +25,6 @@
         "internalType": "uint256",
         "name": "_startBlock",
         "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_feeOwner",
-        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -782,24 +777,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_to",
-        "type": "address"
-      }
-    ],
-    "name": "migrate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "_to",
         "type": "address"
       },
@@ -1079,29 +1056,6 @@
       }
     ],
     "name": "setDomPerBlock",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_feeA",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_feeB",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_feeOwner",
-        "type": "address"
-      }
-    ],
-    "name": "setFee",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
