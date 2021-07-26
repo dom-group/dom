@@ -82,8 +82,8 @@ contract TokenVesting is Ownable {
   uint256 public duration;
 
   struct Locker {
-      uint amount;
-      uint released;
+      uint256 amount;
+      uint256 released;
   }
   // 0.token  1.user
   mapping (address=>mapping (address=>Locker)) public locked;
