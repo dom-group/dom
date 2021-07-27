@@ -92,12 +92,9 @@ contract TokenVesting is Ownable {
   event Lock(address indexed,uint256);
   
   constructor() public {
-      start = block.number;
-  }
-  
-  function setDuration(uint256 _cliff,uint256 _duration) public onlyOwner {
-      cliff = start.add(_cliff);
-      duration = _duration;
+      start = 9505200;
+      cliff = start + 1200;
+      duration = 10512000;
   }
   
   function lock(IERC20 token,uint256 amount) public {
