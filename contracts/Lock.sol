@@ -100,7 +100,6 @@ contract TokenVesting is Ownable {
   function lock(IERC20 token,uint256 amount) public {
       Locker storage locker = locked[address(token)][msg.sender];
       require(locker.amount==0,"have locked");
-      require(block.number < cliff,"Has begun to release");
       locker.amount = amount;
       token.safeTransferFrom(msg.sender,address(this),amount);
       emit Lock(msg.sender,amount);
