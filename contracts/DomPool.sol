@@ -436,7 +436,7 @@ contract DomPool is Ownable, ERC20 {
 
 
     function bonusEndBlock(uint256 _period) public view returns (uint) {
-        return startBlock.mul(_period+1).mul(REDUCE_PERIOD);
+        return startBlock.add((_period+1).mul(REDUCE_PERIOD));
     }
 
     function period(uint256 blockNumber) public view returns (uint _period) {
