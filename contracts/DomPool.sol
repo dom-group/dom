@@ -427,11 +427,11 @@ contract DomPool is Ownable, ERC20 {
         return PriceLibrary.price(factory, tokenA, tokenB);
     }
 
-    function getBalanceOfHash(address account) public view returns(uint poolHash,uint teamHash) {
+    function getBalanceOfHash(address account) public view returns(uint poolHash,uint balance) {
             for(uint i = 0;i<pools.length;i++) {
                 poolHash = poolHash.add(users[account].deposits[i].amountR);
             }
-            teamHash = balanceOf(account).sub(poolHash);
+            balance = balanceOf(account);
     }
 
 
